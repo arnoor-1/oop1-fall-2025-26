@@ -1,31 +1,116 @@
-import java.util.Scanner; 
+package Project;
+import java.text.NumberFormat;
+import java.util.Locale;
+import java.util.Scanner;
 
-public  class MortgageCalculator {
-    public static void main (String[]args ) {
-   System.out.println ("Mortgage Calculator: ") ;
+public class MortgageCalculator {
 
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
 
-   Scanner input = new Scanner (System.in) ;
+        System.out.println("=== Bangladesh Mortgage Calculator (BDT) ===");
 
+        // Get salary
+        double salary = 0;
+        while (true) {
+            System.out.print("Enter your monthly salary (BDT): ");
+            if (scanner.hasNextDouble()) {
+                salary = scanner.nextDouble();
+                break;
+            } else {
+                System.out.println("Error digit enter numbers only(eg. 123456789).");
+                scanner.next();
+            }
+        }
 
-   System.out.println("Enter the loan amount (P): ") ;
-   double principal = input.nextDouble() ;
+        // Get credit score
+        int creditScore = 0;
+        while (true) {
+            System.out.print("Enter credit score (0-500): ");
+            if (scanner.hasNextInt()) {
+                creditScore = scanner.nextInt();
+                if (creditScore >= 0 && creditScore <= 500) {
+                    break;
+                } else {
+                    System.out.println("Credit score must be between 0 and 500.");
+                }
+            } else {
+                System.out.println("Invalid input! Please enter numbers only.");
+                scanner.next();
+            }
+        }
 
-   System.out.println("Enter annual interest rate in ( in % ): ");
-   double annualRate = input.nextDouble();
+        // Get criminal record
+        boolean hasCriminalRecord = false;
+        while (true) {
+            System.out.print("Any criminal record? (true/false): ");
+            String input = scanner.next().toLowerCase();
+            if (input.equals("true") || input.equals("false")) {
+                hasCriminalRecord = Boolean.parseBoolean(input);
+                break;
+            } else {
+                System.out.println("Please enter 'true' or 'false' only.");
+            }
+        }
 
-   System.out.println("Enter the loan term in years : ");
-     int years = input.nextInt();
-     double r = annualRate / 100/ 12 ;
-      int n =  years * 12 ;
+        // Check eligibility
+        if (creditScore < 300 || hasCriminalRecord) {
+            System.out.println("Not eligible for a loan.");
+            System.out.println("Needed Credit score >= 300 and with no criminal record");
+            scanner.close();
+            return;
+        }
 
-      double numerator = r * Math.pow( 1+r , n );
-      double denominator = Math .pow (1+r,n)- 1 ;
-        double monthlyPayment = principal * (numerator/denominator );
+        // Get loan amount
+        double principal = 0;
+        while (true) {
+            System.out.print("Enter loan amount (Principal in BDT): ");
+            if (scanner.hasNextDouble()) {
+                principal = scanner.nextDouble();
+                double maxLoan = salary * 2;
+                if (principal <= maxLoan) {
+                    break;
+                } else {
+                    System.out.println("Loan amount cannot be more than 2 times your salary (" + maxLoan + " BDT)");
+                }
+            } else {
+                System.out.println("Please enter numbers only.");
+                scanner.next();
+            }
+        }
 
-        System.out.println ( "Your monthly payment is ($) : " + String.format("%.2f", monthlyPayment));
+        // Get interest rate
+        System.out.print("Enter annual interest rate (e.g., 8.5 for 8.5%): ");
+        double annualInterestRate = scanner.nextDouble();
 
-        input.close();
+        // Get loan period
+        System.out.print("Enter loan period (in years): ");
+        int years = scanner.nextInt();
 
+        // Calculate mortgage
+        double monthlyInterestRate = (annualInterestRate / 100) / 12;
+        int numberOfPayments = years * 12;
+
+        double mortgagePayment = principal
+                * (monthlyInterestRate * Math.pow(1 + monthlyInterestRate, numberOfPayments))
+                / (Math.pow(1 + monthlyInterestRate, numberOfPayments) - 1);
+
+        double totalPayment = mortgagePayment * numberOfPayments;
+        double totalInterest = totalPayment - principal;
+
+        // Display results
+        Locale bdLocale = Locale.of("en", "BD");
+        NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(bdLocale);
+
+        System.out.println("=== Mortgage Summary ===");
+        System.out.println("Monthly Salary: " + currencyFormatter.format(salary));
+        System.out.println("Credit Score: " + creditScore);
+        System.out.println("Criminal Record: " + (hasCriminalRecord ? "Yes" : "No"));
+        System.out.println("Loan Amount: " + currencyFormatter.format(principal));
+        System.out.println("Monthly Payment: " + currencyFormatter.format(mortgagePayment));
+        System.out.println("Total Payment: " + currencyFormatter.format(totalPayment));
+        System.out.println("Total Interest: " + currencyFormatter.format(totalInterest));
+
+        scanner.close();
     }
 }
