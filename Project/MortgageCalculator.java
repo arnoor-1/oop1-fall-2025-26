@@ -71,7 +71,7 @@ public class MortgageCalculator {
                 if (principal <= maxLoan) {
                     break;
                 } else {
-                    System.out.println("Loan amount cannot be more than 2 times your salary (" + maxLoan + " BDT)");
+                    System.out.println("Loan amount cannot be more than 2 times your salary ");
                 }
             } else {
                 System.out.println("Please enter numbers only.");
@@ -83,11 +83,11 @@ public class MortgageCalculator {
         System.out.print("Enter annual interest rate (e.g., 8.5 for 8.5%): ");
         double annualInterestRate = scanner.nextDouble();
 
-        // Get loan period
+        // Get loan time in year
         System.out.print("Enter loan period (in years): ");
         int years = scanner.nextInt();
 
-        // Calculate mortgage
+
         double monthlyInterestRate = (annualInterestRate / 100) / 12;
         int numberOfPayments = years * 12;
 
@@ -102,10 +102,10 @@ public class MortgageCalculator {
         Locale bdLocale = Locale.of("en", "BD");
         NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(bdLocale);
 
-        System.out.println("=== Mortgage Summary ===");
+        System.out.println("\n=== Mortgage Summary ===");
         System.out.println("Monthly Salary: " + currencyFormatter.format(salary));
         System.out.println("Credit Score: " + creditScore);
-        System.out.println("Criminal Record: " + (hasCriminalRecord ? "Yes" : "No"));
+        System.out.println("Past or present criminal records? " + (hasCriminalRecord ? "Yes" : "No"));
         System.out.println("Loan Amount: " + currencyFormatter.format(principal));
         System.out.println("Monthly Payment: " + currencyFormatter.format(mortgagePayment));
         System.out.println("Total Payment: " + currencyFormatter.format(totalPayment));
