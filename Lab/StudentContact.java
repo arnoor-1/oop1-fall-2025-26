@@ -1,6 +1,5 @@
 package Lab;
 
-// -------------------- CONTACT --------------------
 class Contact {
     private String phone;
     private String email;
@@ -14,24 +13,19 @@ class Contact {
         return "Phone: " + phone + ", Email: " + email;
     }
 }
-
-// -------------------- STUDENT --------------------
 class Student {
     private String name;
-    private Contact contact; // Student HAS a Contact
+    private Contact contact; 
 
     public Student(String name, Contact contact) {
         this.name = name;
         this.contact = contact;
     }
-
     public void showStudentInfo() {
-        System.out.println("Student Name: " + name);
+        System.out.println("Name: " + name);
         System.out.println("Contact: " + contact);
     }
 }
-
-// -------------------- SCHOOL --------------------
 class School {
     private String schoolName;
     private Student[] students;
@@ -39,7 +33,7 @@ class School {
 
     public School(String schoolName, int numberOfStudents) {
         this.schoolName = schoolName;
-        this.students = new Student[numberOfStudents]; // fixed-size array
+        this.students = new Student[numberOfStudents];
     }
 
     public void addStudent(Student s) {
@@ -47,7 +41,7 @@ class School {
             students[count] = s;
             count++;
         } else {
-            System.out.println("Cannot add more students to " + schoolName);
+            System.out.println("Failed");
         }
     }
 
@@ -60,26 +54,20 @@ class School {
         }
     }
 }
-
-// -------------------- MAIN --------------------
-public class SchoolRelationship {
+public class StudentContact {
     public static void main(String[] args) {
-
-        // ---------- Relationship 1: School has many Students ----------
-        School school = new School("Green Valley School", 3);
-
-        school.addStudent(new Student("Alice",
-                new Contact("01711111111", "alice@email.com")));
+        School school = new School("Willes Little Flower", 3);
 
         school.addStudent(new Student("Bob",
-                new Contact("01822222222", "bob@email.com")));
+                new Contact("01715678901", "bob243@gmail.com")));
+
+        school.addStudent(new Student("ben",
+                new Contact("01612678954", "ben@gmail.com")));
 
         school.addStudent(new Student("Charlie",
-                new Contact("01933333333", "charlie@email.com")));
+                new Contact("01642673846", "mikel5678@gmail.com")));
 
         school.showStudents();
     }
 }
 
-    
-}
